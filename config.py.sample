@@ -1,0 +1,6 @@
+# Sample config.py file
+
+organization = 'rackspace'
+project = 'python-novaclient'
+admin_username = 'joe'
+admin_password = 'password'
