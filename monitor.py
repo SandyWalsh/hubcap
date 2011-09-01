@@ -83,10 +83,24 @@ def remove_duplicate_members(members):
     return clean
 
 
+def get_open_pulls():
+    return fetch(open_pulls_url, creds)['pulls']
+
+
 teams = get_teams()
 members = []
 for team in teams:
     members.extend(get_members(team))
 members = remove_duplicate_members(members)
 names = [member['login'] for member in members]
-print ', '.join(names)
+print "Approvers:", ', '.join(names)
+
+open_pulls = get_open_pulls()
+for pull in open_pulls:
+    print """
+Title: %s
+URL: %s
+Mergeable: %s
+User: %s
+Body: %s""" % (pull['title'], pull['html_url'], pull['mergeable'],
+               pull['user']['login'], pull['body'])
