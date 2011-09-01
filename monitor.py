@@ -58,10 +58,7 @@ def fetch(url, username, password):
     base = base64.encodestring('%s:%s' % (username, password)
                               ).replace('\n', '')
     req.add_header("Authorization", "Basic %s" % base)
-    return urllib2.urlopen(req)
+    return simplejson.load(urllib2.urlopen(req))
 
-
-response = simplejson.load(fetch(team_members,
-                                 config.admin_username,
-                                 config.admin_password))
+response = fetch(team_members, config.admin_username, config.admin_password))
 print "RESPONSE", response
