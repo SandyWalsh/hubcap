@@ -81,7 +81,7 @@ def remove_duplicate_members(members):
     for member in members:
         if member['login'] not in added:
             clean.append(member)
-            added = member['login']
+            added.append(member['login'])
     return clean
 
 
