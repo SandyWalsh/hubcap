@@ -39,26 +39,54 @@ if missing:
     print "config.py missing:", ",".join(missing)
     sys.exit(1)
 
-user = 'rackspace'
-project = 'python-novaclient'
+organization = config.organization
+project = config.project
+creds = (config.admin_username, config.admin_password)
 
 open_pulls_url = 'http://github.com/api/v2/json/pulls/%s/%s/open' % \
-                                            (user, project)
+                                            (organization, project)
 
 # Admin operations - authentication required.
 repo_teams = 'http://github.com/api/v2/json/repos/show/%s/%s/teams' % \
-                                            (user, project)
+                                            (organization, project)
 
-team_id = 34462  # Ozone
-team_members = 'http://github.com/api/v2/json/teams/%s/members' % \
-                                    (team_id, )
+# Ozone is team_id = 34462
+team_members = 'http://github.com/api/v2/json/teams/%s/members'
 
-def fetch(url, username, password):
+
+def fetch(url, creds):
+    username, password = creds
     req = urllib2.Request(url)
     base = base64.encodestring('%s:%s' % (username, password)
                               ).replace('\n', '')
     req.add_header("Authorization", "Basic %s" % base)
     return simplejson.load(urllib2.urlopen(req))
 
-response = fetch(team_members, config.admin_username, config.admin_password))
-print "RESPONSE", response
+
+def get_teams():
+    return fetch(repo_teams, creds)['teams']
+
+
+def get_members(team):
+    return fetch(team_members % team['id'], creds)['users']
+
+
+def remove_duplicate_members(members):
+    ids = [member['login'] for member in members]
+    unique = list(set(ids))
+    added = []
+    clean = []
+    for member in members:
+        if member['login'] not in added:
+            clean.append(member)
+            added = member['login']
+    return clean
+
+
+teams = get_teams()
+members = []
+for team in teams:
+    members.extend(get_members(team))
+members = remove_duplicate_members(members)
+names = [member['login'] for member in members]
+print ', '.join(names)
