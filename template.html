@@ -1,0 +1,39 @@
+<html>
+<body>
+
+<h1><a target='_blank' href='{{project_home}}'>{{organization}}/{{project}}</a></h1>
+{% for pull in pulls %}
+<div style='margin-bottom: 1em; background-color: {{ loop.cycle('#fff', '#ccc') }}'>
+    <div><b><a target='_blank' href='{{ pull.html_url }}'>{{ pull.title }}</a></b></div>
+    <div>
+        <b>{{pull.workflow}}</b> - 
+        <b>Core:</b> {{pull.workflow_core}}, 
+        <b>Non-Core:</b> {{pull.workflow_non_core}},
+        <b>Needs Fixing:</b> {{pull.workflow_needs_fixing}},
+        <b>Rejected:</b> {{pull.workflow_rejected}}
+    </div>
+    <div>
+        from <i>{{ pull.user.login }}</i> 
+        {% if pull.mergeable %}(mergeable){% else %}(can't merge){% endif %}
+    </div>
+    <div>{{ pull.body }}</div>
+</div>
+{% endfor %}
+
+<hr style='margin-top: 1em; margin-bottom: 1em'>
+
+<h2>Github comment markup</h2>
+<div><b>!fix</b> - Needs Fixing</div>
+<div><b>!lgtm</b> - Approve</div>
+<div><b>!rejected</b> - Rejected</div>
+<div><b>!wip</b> - Work in Progress</div>
+<div><b>!ready</b> - Ready for review (only by author)</div>
+<div><b>!jenkins</b> - Branch sent to Jenkins (only by hubcap)</div>
+<div><b>!approve</b> - hubcap allows this merge (only by hubcap)</div>
+
+<hr style='margin-top: 1em; margin-bottom: 1em'>
+
+<div><b>Core team:</b><div>
+{{approvers}}
+</body>
+</html>

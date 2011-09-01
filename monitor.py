@@ -23,7 +23,9 @@ THE SOFTWARE.
 """
 
 import base64
+import jinja2
 import urllib2
+import random
 import simplejson
 import sys
 
@@ -93,14 +95,34 @@ for team in teams:
     members.extend(get_members(team))
 members = remove_duplicate_members(members)
 names = [member['login'] for member in members]
-print "Approvers:", ', '.join(names)
+approvers = ', '.join(names)
 
 open_pulls = get_open_pulls()
+# fake some states
+states = ['Needs Review', 'WIP', 'Jenkins', 'Approved']
 for pull in open_pulls:
-    print """
-Title: %s
-URL: %s
-Mergeable: %s
-User: %s
-Body: %s""" % (pull['title'], pull['html_url'], pull['mergeable'],
-               pull['user']['login'], pull['body'])
+    # some fake votes ...
+    core = random.randrange(5)
+    non_core = random.randrange(5)
+    needs_fixing = random.randrange(5)
+    rejected = random.randrange(5)
+
+    pull['workflow_core'] = core
+    pull['workflow_non_core'] = non_core
+    pull['workflow_needs_fixing'] = needs_fixing
+    pull['workflow_rejected'] = rejected
+    pull['workflow'] = random.choice(states)
+
+context = dict(pulls = open_pulls,
+               approvers = approvers,
+               organization = organization,
+               project = project,
+               project_home = 'https://github.com/%s/%s' %
+                              (organization, project))
+
+env = jinja2.Environment(loader = jinja2.FileSystemLoader('.'))
+template = env.get_template("template.html")
+output = template.render(context)
+
+with open('index.html', 'w') as f:
+    f.write(output)
