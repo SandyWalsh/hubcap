@@ -1,0 +1,156 @@
+body {
+	background: #f1f1f1;
+	font: 13.34px helvetica,arial,freesans,clean,sans-serif;
+	color: #666;
+}
+
+#wrapper {
+	width: 640px;
+	margin: 0 auto;
+	background: #fff;
+	padding: 25px;
+	border: 5px solid #e1e1e1;
+}
+
+#content {
+	margin-bottom: 25px;
+	float: left;
+}
+
+a {
+	color: #4183C4;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+h1 {
+	font-size: 20px;
+}
+
+h2 {
+	margin: 0;
+	float: left;
+	width: 100%;
+}
+
+h3 {
+}
+
+h3.status {
+	float: right;
+	background: green;
+	color: #fff;
+	padding: 5px;
+	font-size: 11px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	display: block;
+	max-width: 75px;
+	margin: -30px 0 0;
+}
+
+#merge_proposals {
+	float: left;
+}
+#merge_proposals div.proposal {
+	float: left;
+	border: 1px dotted #ccc;
+	padding: 25px;
+	width: 585px;
+	margin-bottom: 25px;
+	-webkit-transition: background 0.3s linear;
+}
+
+#merge_proposals div.proposal:hover {
+	background: #f5f5f5;
+}
+
+ul {
+	padding: 0;
+}
+
+ul.votes {
+	float: left;
+	width: 678px;
+	margin: 25px -25px -25px;
+}
+
+ul.votes li {
+	list-style: none;
+	display: block;
+	padding: 5px;
+	float: left;
+	width: 149px;
+	font-weight: bold;
+	color: #fff;
+}
+
+li.status {
+	font-size: 14px;
+	font-weight: bold;
+		
+}
+
+.proposal_from {
+	font-style: italic;
+	font-size: 11px;
+	color: #999;
+}
+
+
+ul.votes li.core_votes {
+	background: #6ec07d;
+	color: #00500b;
+}
+
+ul.votes li.non_core_votes {
+	background: #c8f6cc;
+	color: #479a47;
+}
+
+ul.votes li.needs_fixing {
+	background: #fcec71;
+	color: #9b8b1f;
+}
+
+ul.votes li.rejected {
+	background: #fcc1c1;
+	color: #9f0c0a;
+}
+
+h3.jenkins, h3.needs_review, h3.wip {
+	background: #fcec71;
+	color: #9b8b1f;
+	border: 1px solid #ddd183;
+}
+
+#footer {
+	clear: both;
+	padding-top: 25px;
+	border-top: 1px dotted #ccc;
+}
+
+ul.github_help {
+	float: left;
+	list-style: none;
+}
+
+ul.github_help li {
+	display: block;
+	float: left;
+	width: 100%;
+	background: #f2f2f2;
+	padding: 5px;
+}
+
+ul.github_help li.odd {
+	background: #fff;
+}
+.hubcap_only {
+	color: #999;
+}
+

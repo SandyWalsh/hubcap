@@ -1,43 +1,57 @@
 <html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <title>Hubcap</title>
+  <link rel="stylesheet" href="style.css" type="text/css" media="screen" title="no title" charset="utf-8">
+</head>
+
 <body>
+  <div id="wrapper">
+    <h1><a target='_blank' href='http://github.com/'>{{organization}}</a> / <a href="http://github.com/{{organization}}/{{project}}">{{project}}</a></h1>
 
-<h1><a target='_blank' href='{{project_home}}'>{{organization}}/{{project}}</a></h1>
-{% for pull in pulls %}
-<div style='margin-bottom: 1em; background-color: {{ loop.cycle('#fff', '#ccc') }}'>
-    <div><b><a target='_blank' href='{{ pull.html_url }}'>{{ pull.title }}</a></b></div>
-    <div>
-        <b>{{pull.workflow}}</b> - 
-        <b>Core:</b> {{pull.workflow_core}}, 
-        <b>Non-Core:</b> {{pull.workflow_non_core}},
-        <b>Needs Fixing:</b> {{pull.workflow_needs_fixing}},
-        <b>Rejected:</b> {{pull.workflow_rejected}}
+    <div id="content">
+      <div id="merge_proposals">
+        {% for pull in pulls %}
+        <div class="proposal {{loop.cycle('odd', 'even')}}">
+          <a target='_blank' href=''></a>
+          <a class="branch_name" href="{{pull.html_url}}"><h2>{{pull.title}}</h2></a>
+          <h3 class="status {% if pull.workflow == "Needs Review"%}needs_review{% endif %}{% if pull.workflow == "WIP"%}wip{% endif %}{% if pull.workflow == "Jenkins"%}jenkins{% endif %}{% if pull.workflow == "Approved"%}approved{% endif %}">{{pull.workflow}}</h3>
+
+          <span class="proposal_from">
+            Proposal from <a href="http://github.com/{{pull.user.login}}">{{pull.user.login}}</a> {% if pull.mergeable %}(mergeable){% else %}(can't merge){% endif %}
+          </span>
+          <p class="description">{{pull.body}}</p>
+
+          <ul class="votes">
+            <li class="core_votes">Core: {{pull.workflow_core}}</li>
+            <li class="non_core_votes">Non-Core: {{pull.workflow_non_core}}</li>
+            <li class="needs_fixing">Needs Fixing: {{pull.workflow_needs_fixing}}</li>
+            <li class="rejected">Rejected: {{pull.workflow_rejected}}</li>
+          </ul>
+
+        </div>
+        {% endfor %}
+      </div>
+
+      <h2>Github comment markup</h2>
+      <ul class="github_help">
+        <li class="odd"><strong>!fix</strong> &mdash; Needs Fixing</li>
+        <li class="even"><strong>!lgtm</strong> &mdash; Approve</li>
+        <li class="odd"><strong>!rejected</strong> &mdash; Rejected</li>
+        <li class="even"><strong>!wip</strong> &mdash; Work in Progress</li>
+        <li class="odd"><strong>!ready</strong> &mdash; Ready for review (only by author)</li>
+        <li class="even hubcap_only"><strong>!jenkins</strong> &mdash; Branch sent to Jenkins (only by hubcap)</li>
+        <li class="odd hubcap_only"><strong>!approve</strong> &mdash; Hubcap approves merge (only by hubcap)</li>
+      </ul>
+
+      <div id="core_members">
+        <h2>Core team for {{project}}</h2>
+        <p>{{approvers}}</p>
+      </div>
     </div>
-    <div>
-        from <i>{{ pull.user.login }}</i> 
-        {% if pull.mergeable %}(mergeable){% else %}(can't merge){% endif %}
+
+    <div class="footer">
+      Hubcap project home is <a href='https://github.com/SandyWalsh/hubcap'>here</a>
     </div>
-    <div>{{ pull.body }}</div>
-</div>
-{% endfor %}
-
-<hr style='margin-top: 1em; margin-bottom: 1em'>
-
-<h2>Github comment markup</h2>
-<div><b>!fix</b> - Needs Fixing</div>
-<div><b>!lgtm</b> - Approve</div>
-<div><b>!rejected</b> - Rejected</div>
-<div><b>!wip</b> - Work in Progress</div>
-<div><b>!ready</b> - Ready for review (only by author)</div>
-<div><b>!jenkins</b> - Branch sent to Jenkins (only by hubcap)</div>
-<div><b>!approve</b> - hubcap allows this merge (only by hubcap)</div>
-
-<hr style='margin-top: 1em; margin-bottom: 1em'>
-
-<div><b>Core team:</b><div>
-{{approvers}}
-
-<hr style='margin-top: 1em; margin-bottom: 1em'>
-
-Hubcap project home is <a href='https://github.com/SandyWalsh/hubcap'>here</a>
-</body>
-</html>
+  </body>
+  </html>
